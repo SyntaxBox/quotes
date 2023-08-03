@@ -8,27 +8,28 @@ import { AuthService } from './auth/auth.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { QuotesModule } from './quotes/quotes.module';
-import { IdValidationPipe } from './common';
+import { QuotesController } from './quotes/quotes.controller';
+import { QuotesService } from './quotes/quotes.service';
 
 @Module({
   imports: [
     PrismaModule,
     AuthModule,
-    JwtModule.register({
-      secret: process.env.JWT_KEY,
-      signOptions: { expiresIn: '2h' },
-    }),
     QuotesModule,
+    JwtModule.register({
+      secret: process.env.JWT_KEY, // Replace this with your secret key
+      signOptions: { expiresIn: '2h' }, // Optionally, set token expiration time
+    }),
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController, AuthController, QuotesController],
   providers: [
     AppService,
     AuthService,
+    QuotesService,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
-    IdValidationPipe,
   ],
 })
 export class AppModule {}
