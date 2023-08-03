@@ -7,7 +7,13 @@ import {
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUser, validUser } from 'src/common';
+import {
+  CreateUser,
+  UserId,
+  ValidUser,
+  ValidUserViaId,
+  ValidUserViaCredentials,
+} from 'src/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -47,14 +53,29 @@ export class AuthService {
     }
   }
 
-  async validUser({ where, select }: validUser) {
+  private isIdWhere(obj: any): obj is UserId {
+    return 'id' in obj;
+  }
+
+  private async validUserViaId({ where, select }: ValidUserViaId) {
+    const user = await this.prismaService.user.findUnique({
+      where,
+      select,
+    });
+    if (!user) throw new NotFoundException('user Not Found');
+    return user;
+  }
+
+  private async validUserViaCredentials({
+    where,
+    select,
+  }: ValidUserViaCredentials) {
     const { email, password } = where;
     const user = await this.prismaService.user.findUnique({
       where: { email },
       select: { ...select, password: true },
     });
     if (!user) throw new NotFoundException('Email Not Found');
-    console.log(user, password);
     try {
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (passwordMatch) {
@@ -72,7 +93,12 @@ export class AuthService {
     }
   }
 
-  async generateToken(payload: object, options?: JwtSignOptions) {
+  async validUser({ where, select }: ValidUser) {
+    if (this.isIdWhere(where)) return this.validUserViaId({ where, select });
+    else return this.validUserViaCredentials({ where, select });
+  }
+
+  async generateJWT(payload: object, options?: JwtSignOptions) {
     return this.jwtService.sign(payload, options);
   }
 }

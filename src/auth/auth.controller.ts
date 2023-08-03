@@ -1,15 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Module,
-  Post,
-  Req,
-  UseGuards,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Module, Post, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard, LoginDto, SignInDto } from 'src/common';
+import { LoginDto, SignInDto } from 'src/common';
 
 @Controller('auth')
 @Module({
@@ -28,12 +19,6 @@ export class AuthController {
       where: data,
       select: { id: true },
     });
-    return this.authService.generateToken(user, { expiresIn: '24h' });
-  }
-
-  @Get('token')
-  @UseGuards(JwtAuthGuard)
-  async token(@Req() { id }) {
-    return this.authService.generateToken({ id }, { expiresIn: '365d' });
+    return this.authService.generateJWT(user, { expiresIn: '24h' });
   }
 }
