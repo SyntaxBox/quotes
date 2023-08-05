@@ -25,7 +25,7 @@ export class JwtAuthGuard implements CanActivate {
     try {
       const decodedToken = this.jwtService.verify(token);
       const validUser = await this.authService.validUser({
-        where: { id: decodedToken },
+        where: { id: decodedToken.id },
         select: { id: true },
       });
 
