@@ -20,11 +20,20 @@ export type QuoteId = Pick<Quote, 'id'>;
 
 export type UpdateQuote = {
   where: QuoteId;
-  data: Data;
+  data: Partial<Data>;
   select: QuoteFilter;
 };
 
 export type FindUniqueQuote = {
   where: QuoteId;
+  select: QuoteFilter;
+};
+
+export type DeleteQuote = {
+  where: QuoteId;
+  select: QuoteFilter;
+};
+
+export type RandomQuote = {
   select: QuoteFilter;
 };

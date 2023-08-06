@@ -31,6 +31,7 @@ export class JwtAuthGuard implements CanActivate {
 
       if (validUser) {
         request.userId = decodedToken.id;
+        console.log(request);
         return true;
       } else throw new UnauthorizedException('Invalid token.');
     } catch (error) {

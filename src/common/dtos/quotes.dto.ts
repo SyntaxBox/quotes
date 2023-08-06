@@ -38,11 +38,35 @@ export class UpdateQuoteDTO {
 
   @IsOptional()
   @IsBoolean()
-  @IsNotEmpty()
   published: boolean;
 
   @IsBoolean()
   @IsOptional()
-  @IsNotEmpty()
   showUserInformation: boolean;
+}
+
+export class QueryParamsDTO {
+  @IsBoolean()
+  @IsOptional()
+  quote: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  showUserInformation: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  author: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  published: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  createdAt: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  updateAt: boolean;
 }

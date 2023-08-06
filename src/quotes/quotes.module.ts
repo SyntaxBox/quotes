@@ -9,5 +9,6 @@ import { AuthModule } from 'src/auth/auth.module';
   controllers: [QuotesController],
   providers: [QuotesService],
   imports: [PrismaModule, JwtModule, AuthModule],
+  exports: [QuotesService],
 })
 export class QuotesModule {}
