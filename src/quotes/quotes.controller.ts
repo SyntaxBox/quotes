@@ -50,12 +50,12 @@ export class QuotesController {
     return 'shit';
   }
 
-  @Get('quote:id')
+  @Get('quote/:id')
   async getQuote() {
     return 'shit';
   }
 
-  @Get('quotes:id')
+  @Get('quotes')
   async getQuotes() {
     return 'shit';
   }

@@ -16,8 +16,15 @@ export type CreateQuote = {
   select: QuoteFilter;
 };
 
+export type QuoteId = Pick<Quote, 'id'>;
+
 export type UpdateQuote = {
-  where: Pick<Quote, 'id'>;
+  where: QuoteId;
   data: Data;
+  select: QuoteFilter;
+};
+
+export type FindUniqueQuote = {
+  where: QuoteId;
   select: QuoteFilter;
 };

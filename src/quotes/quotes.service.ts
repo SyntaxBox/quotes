@@ -1,5 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateQuote, UpdateQuote } from 'src/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateQuote, FindUniqueQuote, UpdateQuote } from 'src/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -17,6 +22,18 @@ export class QuotesService {
         'quote could not be created',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    }
+  }
+
+  async findUniqueQuote({ where, select }: FindUniqueQuote) {
+    try {
+      const quote = await this.prismaService.quote.findUnique({
+        where,
+        select,
+      });
+      return quote;
+    } catch (err) {
+      throw new NotFoundException('quote not found');
     }
   }
 
