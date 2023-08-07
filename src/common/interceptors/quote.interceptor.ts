@@ -15,15 +15,12 @@ export class AddUserInfoToResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map(async (data) => {
-        data.userInformation = {};
-        if (data.showUserInformation) {
-          const user = await this.prismaService.quote.findUnique({
+        if (data.showUserInformation === true) {
+          const quote = await this.prismaService.quote.findUnique({
             where: { id: data.id },
-            include: {
-              user: { select: { fname: true, lname: true } },
-            },
+            select: { user: { select: { fname: true, lname: true } } },
           });
-          data.userInformation = user;
+          data.user = quote.user;
         }
         return data;
       }),

@@ -33,7 +33,7 @@ export class QuotesController {
   async addQuote(
     @Body(ValidationPipe) data: AddQuoteDTO,
     @Req() req,
-    @Query() select: any,
+    @QuoteQuery() select: QueryParams,
   ) {
     const { userId } = req;
     return await this.quotesService.create({
@@ -47,24 +47,31 @@ export class QuotesController {
   async updateQuote(
     @Param('id') id: string,
     @Body(ValidationPipe) data: UpdateQuoteDTO,
-    @Query('id', ParseBooleanPipe) ids: boolean,
+    @QuoteQuery() select: QueryParams,
   ) {
     return this.quotesService.update({
       where: { id },
       data,
-      select: { id: ids },
+      select: { id: true, ...select },
     });
   }
 
   @UseGuards(JwtAuthGuard, QuoteOwnerGuard)
   @Delete('delete/:id')
-  async deleteQuote(@Param('id') id: string, @Query() select: any) {
-    return await this.quotesService.delete({ where: { id }, select });
+  async deleteQuote(
+    @Param('id') id: string,
+    @QuoteQuery() select: QueryParams,
+  ) {
+    return await this.quotesService.delete({
+      where: { id },
+      select: { id: true, ...select },
+    });
   }
 
   @UseInterceptors(AddUserInfoToResponseInterceptor)
   @Get('random')
   async getRandomQuote(@QuoteQuery() select: QueryParams) {
+    console.log(select);
     return await this.quotesService.findRandom({
       select: {
         id: true,
