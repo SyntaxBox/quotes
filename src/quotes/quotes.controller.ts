@@ -18,6 +18,8 @@ import {
   AddUserInfoToResponseInterceptor,
   JwtAuthGuard,
   ParseBooleanPipe,
+  QueryParams,
+  QuoteQuery,
   UpdateQuoteDTO,
 } from 'src/common';
 import { QuoteOwnerGuard } from 'src/common/guards/quotes.guard';
@@ -62,24 +64,11 @@ export class QuotesController {
 
   @UseInterceptors(AddUserInfoToResponseInterceptor)
   @Get('random')
-  async getRandomQuote(
-    @Query('author', ParseBooleanPipe) author: boolean,
-    @Query('quote', ParseBooleanPipe) quote: boolean,
-    @Query('published', ParseBooleanPipe) published: boolean,
-    @Query('showUserInformation', ParseBooleanPipe)
-    showUserInformation: boolean,
-    @Query('createdAt', ParseBooleanPipe) createdAt: boolean,
-    @Query('updatedAt', ParseBooleanPipe) updatedAt: boolean,
-  ) {
+  async getRandomQuote(@QuoteQuery() select: QueryParams) {
     return await this.quotesService.findRandom({
       select: {
         id: true,
-        author,
-        quote,
-        createdAt,
-        published,
-        showUserInformation,
-        updatedAt,
+        ...select,
       },
     });
   }
