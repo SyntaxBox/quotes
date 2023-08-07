@@ -11,6 +11,7 @@ import {
   DeleteQuote,
   QuoteFilter,
   RandomQuote,
+  FindManyQuotes,
 } from 'src/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -46,6 +47,23 @@ export class QuotesService {
         select,
       });
       return quote;
+    } catch (err) {
+      throw new NotFoundException('quote not found');
+    }
+  }
+
+  async findMany({ take, skip, where, select }: FindManyQuotes) {
+    try {
+      const quotes = await this.prismaService.quote.findMany({
+        where,
+        take,
+        skip,
+        select,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+      return quotes;
     } catch (err) {
       throw new NotFoundException('quote not found');
     }

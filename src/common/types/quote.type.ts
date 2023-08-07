@@ -29,6 +29,13 @@ export type FindUniqueQuote = {
   select: QuoteFilter;
 };
 
+export type FindManyQuotes = {
+  take: number;
+  skip: number;
+  where?: QuoteId;
+  select: QuoteFilter;
+};
+
 export type DeleteQuote = {
   where: QuoteId;
   select: QuoteFilter;

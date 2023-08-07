@@ -3,25 +3,29 @@ import { IsBoolean, IsOptional } from 'class-validator';
 export class QueryParams {
   @IsBoolean()
   @IsOptional()
-  quote: boolean;
+  id?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  showUserInformation: boolean;
+  quote?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  author: boolean;
+  showUserInformation?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  published: boolean;
+  author?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  createdAt: boolean;
+  published?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  updateAt: boolean;
+  createdAt?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  updateAt?: boolean;
 }

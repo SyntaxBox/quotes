@@ -27,6 +27,7 @@ export const QuoteQuery = createParamDecorator(
       }
     }
 
+    if (Object.keys(parsedQuery).length === 0) return undefined;
     return parsedQuery;
   },
 );
