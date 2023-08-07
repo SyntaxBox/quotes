@@ -9,7 +9,6 @@ import {
   FindUniqueQuote,
   UpdateQuote,
   DeleteQuote,
-  QuoteFilter,
   RandomQuote,
   FindManyQuotes,
 } from 'src/common';
