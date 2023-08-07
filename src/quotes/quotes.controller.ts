@@ -10,10 +10,12 @@ import {
   Req,
   Param,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { QuotesService } from './quotes.service';
 import {
   AddQuoteDTO,
+  AddUserInfoToResponseInterceptor,
   JwtAuthGuard,
   ParseBooleanPipe,
   UpdateQuoteDTO,
@@ -58,6 +60,7 @@ export class QuotesController {
     return await this.quotesService.delete({ where: { id }, select });
   }
 
+  @UseInterceptors(AddUserInfoToResponseInterceptor)
   @Get('random')
   async getRandomQuote(
     @Query('author', ParseBooleanPipe) author: boolean,
