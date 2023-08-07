@@ -18,7 +18,9 @@ export class AddUserInfoToResponseInterceptor implements NestInterceptor {
         if (data.showUserInformation === true) {
           const quote = await this.prismaService.quote.findUnique({
             where: { id: data.id },
-            select: { user: { select: { fname: true, lname: true } } },
+            select: {
+              user: { select: { fname: true, lname: true, id: true } },
+            },
           });
           data.user = quote.user;
         }

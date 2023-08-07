@@ -71,7 +71,6 @@ export class QuotesController {
   @UseInterceptors(AddUserInfoToResponseInterceptor)
   @Get('random')
   async getRandomQuote(@QuoteQuery() select: QueryParams) {
-    console.log(select);
     return await this.quotesService.findRandom({
       select: {
         id: true,
@@ -80,9 +79,13 @@ export class QuotesController {
     });
   }
 
+  @UseInterceptors(AddUserInfoToResponseInterceptor)
   @Get('quote/:id')
-  async getQuote() {
-    return 'shit';
+  async getQuote(@Param('id') id: string, @QuoteQuery() select: QueryParams) {
+    return await this.quotesService.findUnique({
+      where: { id },
+      select: { ...select, id: true },
+    });
   }
 
   @Get('quotes')
