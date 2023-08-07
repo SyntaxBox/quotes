@@ -15,7 +15,7 @@ import { QuotesService } from './quotes.service';
 import {
   AddQuoteDTO,
   JwtAuthGuard,
-  QueryParamsDTO,
+  ParseBooleanPipe,
   UpdateQuoteDTO,
 } from 'src/common';
 import { QuoteOwnerGuard } from 'src/common/guards/quotes.guard';
@@ -24,47 +24,61 @@ import { QuoteOwnerGuard } from 'src/common/guards/quotes.guard';
 export class QuotesController {
   constructor(private readonly quotesService: QuotesService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post('add-quote')
+  @UseGuards(JwtAuthGuard)
   async addQuote(
     @Body(ValidationPipe) data: AddQuoteDTO,
     @Req() req,
-    @Query(ValidationPipe) select: QueryParamsDTO,
+    @Query() select: any,
   ) {
     const { userId } = req;
     return await this.quotesService.create({
       data: { ...data, userId },
-      select,
+      select: { ...select, id: true },
     });
   }
 
-  @UseGuards(JwtAuthGuard, QuoteOwnerGuard)
   @Patch('update/:id')
+  @UseGuards(JwtAuthGuard, QuoteOwnerGuard)
   async updateQuote(
     @Param('id') id: string,
     @Body(ValidationPipe) data: UpdateQuoteDTO,
-    @Query(ValidationPipe) select: QueryParamsDTO,
+    @Query('id', ParseBooleanPipe) ids: boolean,
   ) {
     return this.quotesService.update({
       where: { id },
       data,
-      select,
+      select: { id: ids },
     });
   }
 
   @UseGuards(JwtAuthGuard, QuoteOwnerGuard)
   @Delete('delete/:id')
-  async deleteQuote(
-    @Param('id') id: string,
-    @Query(ValidationPipe) select: QueryParamsDTO,
-  ) {
+  async deleteQuote(@Param('id') id: string, @Query() select: any) {
     return await this.quotesService.delete({ where: { id }, select });
   }
 
   @Get('random')
-  async getRandomQuote(@Query(ValidationPipe) select: QueryParamsDTO) {
-    console.log(select);
-    return await this.quotesService.findRandom({ select });
+  async getRandomQuote(
+    @Query('author', ParseBooleanPipe) author: boolean,
+    @Query('quote', ParseBooleanPipe) quote: boolean,
+    @Query('published', ParseBooleanPipe) published: boolean,
+    @Query('showUserInformation', ParseBooleanPipe)
+    showUserInformation: boolean,
+    @Query('createdAt', ParseBooleanPipe) createdAt: boolean,
+    @Query('updatedAt', ParseBooleanPipe) updatedAt: boolean,
+  ) {
+    return await this.quotesService.findRandom({
+      select: {
+        id: true,
+        author,
+        quote,
+        createdAt,
+        published,
+        showUserInformation,
+        updatedAt,
+      },
+    });
   }
 
   @Get('quote/:id')

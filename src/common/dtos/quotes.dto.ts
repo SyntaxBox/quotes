@@ -44,29 +44,3 @@ export class UpdateQuoteDTO {
   @IsOptional()
   showUserInformation: boolean;
 }
-
-export class QueryParamsDTO {
-  @IsBoolean()
-  @IsOptional()
-  quote: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  showUserInformation: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  author: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  published: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  createdAt: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  updateAt: boolean;
-}
