@@ -3,17 +3,11 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import {
-  CreateUser,
-  UserId,
-  ValidUser,
-  ValidUserViaId,
-  ValidUserViaCredentials,
-} from 'src/common';
+import { CreateUser, UserId, ValidUser, UserProviderId } from 'src/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -24,23 +18,14 @@ export class AuthService {
   ) {}
 
   async createUser({ data, select }: CreateUser) {
-    const usedEmail = await this.prismaService.user.findFirst({
-      where: { email: data.email },
-      select: { email: true },
+    const userExists = await this.prismaService.user.findFirst({
+      where: { providerId: data.providerId },
+      select,
     });
-    if (usedEmail) throw new ConflictException('Email already signed up');
-    let hashedPassword;
-    try {
-      hashedPassword = await bcrypt.hash(data.password, 10);
-    } catch (err) {
-      throw new HttpException(
-        'cannot check password validity',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    if (userExists) throw new ConflictException('user already exists');
     try {
       const newUser = await this.prismaService.user.create({
-        data: { ...data, password: hashedPassword },
+        data,
         select,
       });
       return newUser;
@@ -57,45 +42,27 @@ export class AuthService {
     return 'id' in obj;
   }
 
-  private async validUserViaId({ where, select }: ValidUserViaId) {
-    const user = await this.prismaService.user.findUnique({
-      where,
-      select,
-    });
-    if (!user) throw new NotFoundException('user Not Found');
-    return user;
-  }
-
-  private async validUserViaCredentials({
-    where,
-    select,
-  }: ValidUserViaCredentials) {
-    const { email, password } = where;
-    const user = await this.prismaService.user.findUnique({
-      where: { email },
-      select: { ...select, password: true },
-    });
-    if (!user) throw new NotFoundException('Email Not Found');
-    try {
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (passwordMatch) {
-        !select.password && delete user.password;
-        return user;
-      } else {
-        throw new HttpException('Wrong password', HttpStatus.UNAUTHORIZED);
-      }
-    } catch (err) {
-      console.log(err);
-      throw new HttpException(
-        'cannot check password validity',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  private isProviderIdWhere(obj: any): obj is UserProviderId {
+    return 'providerId' in obj;
   }
 
   async validUser({ where, select }: ValidUser) {
-    if (this.isIdWhere(where)) return this.validUserViaId({ where, select });
-    else return this.validUserViaCredentials({ where, select });
+    let uniqueAttr;
+    if (this.isIdWhere(where)) uniqueAttr = { id: where.id };
+    else if (this.isProviderIdWhere(where))
+      uniqueAttr = { providerId: where.providerId };
+    else uniqueAttr = { email: where.email };
+
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: uniqueAttr,
+        select,
+      });
+      if (!user) false;
+      return user;
+    } catch (err) {
+      throw new InternalServerErrorException('Cannot find record');
+    }
   }
 
   async generateJWT(payload: object, options?: JwtSignOptions) {

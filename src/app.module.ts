@@ -18,7 +18,7 @@ import { QuotesService } from './quotes/quotes.service';
     QuotesModule,
     JwtModule.register({
       secret: process.env.JWT_KEY, // Replace this with your secret key
-      signOptions: { expiresIn: '2h' }, // Optionally, set token expiration time
+      signOptions: { expiresIn: '24h' }, // Optionally, set token expiration time
     }),
   ],
   controllers: [AppController, AuthController, QuotesController],

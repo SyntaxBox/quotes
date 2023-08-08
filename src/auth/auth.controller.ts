@@ -1,32 +1,36 @@
 import {
-  Body,
   Controller,
-  Post,
+  Get,
+  Req,
+  UseGuards,
   UseInterceptors,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, SignInDto, TrimParamsInterceptor } from 'src/common';
+import { TrimParamsInterceptor } from 'src/common';
+import { AuthGuard } from '@nestjs/passport';
 
 @UseInterceptors(TrimParamsInterceptor)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('sign-up')
-  async signIn(@Body(ValidationPipe) data: SignInDto) {
-    const user = this.authService.createUser({ data, select: { id: true } });
-
-    return user;
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleLogin() {
+    //
   }
 
-  @Post('login')
-  async login(@Body(ValidationPipe) data: LoginDto) {
-    const user = await this.authService.validUser({
-      where: data,
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleLoginCallback(@Req() req: any) {
+    // console.log(req);
+  }
+
+  @Get('h')
+  async g() {
+    return await this.authService.validUser({
+      where: { id: 'hello' },
       select: { id: true },
     });
-
-    return this.authService.generateJWT(user, { expiresIn: '24h' });
   }
 }

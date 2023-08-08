@@ -25,13 +25,17 @@ model Quote {
 }
 
 model User {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  fname     String
-  lname     String
-  email     String  @unique
-  password  String
-  validated Boolean @default(false)
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  fname         String
+  lname         String
+  email         String   @unique
+  provider      Provider
+  providerId    String   @unique
+  EmailVerified Boolean
+  Quote         Quote[]
+}
 
-  // Define a relation to Quote
-  Quote Quote[]
+enum Provider {
+  GOOGLE
+  GITHUB
 }

@@ -1,29 +1,36 @@
 import { User as PrismaUser } from '@prisma/client';
 type User = PrismaUser;
 
-export type UserFilter = {
+type OptionalUser = {
   [K in keyof User]?: boolean;
 };
 
+export type UserFilter = Omit<OptionalUser, 'providerId'>;
+export type UserId = Pick<User, 'id'>;
+export type UserProviderId = Pick<User, 'providerId'>;
+export type UserCredentials = Pick<User, 'email'>;
+
 export type CreateUser = {
-  data: Pick<User, 'email' | 'password' | 'fname' | 'lname'>;
+  data: Omit<User, 'id'>;
   select: UserFilter;
 };
 
-export type UserId = Pick<User, 'id'>;
-export type userCredentials = Pick<User, 'email' | 'password'>;
+export type ValidUser = {
+  where: UserId | UserProviderId | UserCredentials;
+  select: UserFilter;
+};
 
 export type ValidUserViaId = {
   where: UserId;
   select: UserFilter;
 };
 
-export type ValidUserViaCredentials = {
-  where: userCredentials;
+export type ValidUserViaProviderId = {
+  where: UserProviderId;
   select: UserFilter;
 };
 
-export type ValidUser = {
-  where: UserId | userCredentials;
+export type ValidUserViaCredentials = {
+  where: UserCredentials;
   select: UserFilter;
 };
