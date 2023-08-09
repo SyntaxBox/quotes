@@ -24,6 +24,7 @@ export class QuotesService {
       select,
     });
   }
+  // creating new quote
   async create({ data, select }: CreateQuote) {
     try {
       const newQuote = await this.prismaService.quote.create({
@@ -39,6 +40,7 @@ export class QuotesService {
     }
   }
 
+  // finding unique quote using id
   async findUnique({ where, select }: FindUniqueQuote) {
     try {
       const quote = await this.prismaService.quote.findUnique({
@@ -51,6 +53,10 @@ export class QuotesService {
     }
   }
 
+  // finding many quotes
+  // take means the number of records
+  // skip means the number of skipped records
+  // records are orders in descendant order
   async findMany({ take, skip, where, select }: FindManyQuotes) {
     try {
       const quotes = await this.prismaService.quote.findMany({
@@ -68,6 +74,7 @@ export class QuotesService {
     }
   }
 
+  // updating single quote via id
   async update({ data, select, where }: UpdateQuote) {
     try {
       const updatedQuote = await this.prismaService.quote.update({
@@ -84,6 +91,7 @@ export class QuotesService {
     }
   }
 
+  // deleting single quote via id
   async delete({ select, where }: DeleteQuote) {
     try {
       const updatedQuote = await this.prismaService.quote.delete({

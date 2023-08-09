@@ -6,6 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
+// new quote required data
 export class AddQuoteDTO {
   @IsString()
   @MinLength(10)
@@ -25,6 +26,7 @@ export class AddQuoteDTO {
   showUserInformation: boolean;
 }
 
+// quote update required data
 export class UpdateQuoteDTO {
   @IsOptional()
   @IsString()

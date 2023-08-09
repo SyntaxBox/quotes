@@ -1,17 +1,28 @@
 import { User as PrismaUser } from '@prisma/client';
+// dynamic user type depends on the prisma client user type
 type User = PrismaUser;
 
+// transforming the User type to optional boolean values
 type OptionalUser = {
   [K in keyof User]?: boolean;
 };
+
+// other types are can be understood from it's name
 
 export type UserFilter = Omit<OptionalUser, 'providerId'>;
 export type UserId = Pick<User, 'id'>;
 export type UserProviderId = Pick<User, 'providerId'>;
 export type UserCredentials = Pick<User, 'email'>;
+export type UserData = Omit<User, 'id'>;
 
 export type CreateUser = {
-  data: Omit<User, 'id'>;
+  data: UserData;
+  select: UserFilter;
+};
+
+export type UpdateUser = {
+  data: Partial<Omit<UserData, 'provider'>>;
+  where: UserId | UserProviderId | UserCredentials;
   select: UserFilter;
 };
 

@@ -4,10 +4,16 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { CreateUser, UserId, ValidUser, UserProviderId } from 'src/common';
+import {
+  CreateUser,
+  UserId,
+  ValidUser,
+  UserProviderId,
+  UserCredentials,
+  UpdateUser,
+} from 'src/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -17,7 +23,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createUser({ data, select }: CreateUser) {
+  //create new user object
+  async create({ data, select }: CreateUser) {
     const userExists = await this.prismaService.user.findFirst({
       where: { providerId: data.providerId },
       select,
@@ -38,21 +45,24 @@ export class AuthService {
     }
   }
 
-  private isIdWhere(obj: any): obj is UserId {
-    return 'id' in obj;
+  //update user object
+  async update({ data, select, where }: UpdateUser) {
+    const uniqueAttr = this.uniqueSelectionAttribute(where);
+    try {
+      const updatedUser = this.prismaService.user.update({
+        where: uniqueAttr,
+        data,
+        select,
+      });
+      return updatedUser;
+    } catch (err) {
+      throw new InternalServerErrorException('cannot update record');
+    }
   }
 
-  private isProviderIdWhere(obj: any): obj is UserProviderId {
-    return 'providerId' in obj;
-  }
-
+  // check if the user exists in the db
   async validUser({ where, select }: ValidUser) {
-    let uniqueAttr;
-    if (this.isIdWhere(where)) uniqueAttr = { id: where.id };
-    else if (this.isProviderIdWhere(where))
-      uniqueAttr = { providerId: where.providerId };
-    else uniqueAttr = { email: where.email };
-
+    const uniqueAttr = this.uniqueSelectionAttribute(where);
     try {
       const user = await this.prismaService.user.findUnique({
         where: uniqueAttr,
@@ -65,7 +75,27 @@ export class AuthService {
     }
   }
 
+  // generate jwt token
   async generateJWT(payload: object, options?: JwtSignOptions) {
     return this.jwtService.sign(payload, options);
+  }
+
+  // check the given unique attribute to fetch unique user record
+  private uniqueSelectionAttribute(
+    where: UserId | UserProviderId | UserCredentials,
+  ): UserId & UserProviderId & UserCredentials {
+    const returnValue = {
+      id: undefined,
+      providerId: undefined,
+      email: undefined,
+    };
+    if ('id' in where) {
+      returnValue.id = where.id;
+    } else if ('providerId' in where) {
+      returnValue.providerId = where.providerId;
+    } else if ('email' in where) {
+      returnValue.email = where.email;
+    }
+    return returnValue;
   }
 }

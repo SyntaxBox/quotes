@@ -7,10 +7,14 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+// removes extra spaces from the request data
+// request query| params| body
 @Injectable()
 export class TrimParamsInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
+    // checking each object if exists
+    // assigning each object to the spaces removed version
     if (request.query) {
       request.query = this.trimObjectProperties(request.query);
     }
@@ -23,6 +27,7 @@ export class TrimParamsInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
+        // check if the data exists & of type object
         if (data && typeof data === 'object') {
           return this.trimObjectProperties(data);
         }
@@ -31,6 +36,10 @@ export class TrimParamsInterceptor implements NestInterceptor {
     );
   }
 
+  // operation is done only for string key values
+  // trim each key value
+  // remove extra spaces between the words sing regex
+  // returns the trimmed version
   private trimObjectProperties(obj: object): object {
     const trimmedObj = {};
     for (const [key, value] of Object.entries(obj)) {

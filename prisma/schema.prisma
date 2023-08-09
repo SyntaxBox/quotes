@@ -31,10 +31,12 @@ model User {
   email         String   @unique
   provider      Provider
   providerId    String   @unique
+  profileImage  String?
   EmailVerified Boolean
   Quote         Quote[]
 }
 
+// OAuth providers enum
 enum Provider {
   GOOGLE
   GITHUB

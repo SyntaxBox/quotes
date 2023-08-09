@@ -14,12 +14,14 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  // google OAuth endpoint
   @Get('google')
   @UseGuards(AuthGuard('google'))
   async googleLogin() {
     //
   }
 
+  // google OAuth callback endpoint
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req: any) {
