@@ -5,6 +5,10 @@ import { AuthService } from './auth.service';
 import { Provider } from '@prisma/client';
 import { ObjectUtils, UserData } from 'src/common';
 
+// google OAuth strategy
+// returns user object
+// user object has id property
+// id is the user db id
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
@@ -25,7 +29,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-  ): Promise<any> {
+  ): Promise<{ id: string }> {
     const profileData = {
       // extract the data from the profile object
       provider: Provider.GOOGLE,
