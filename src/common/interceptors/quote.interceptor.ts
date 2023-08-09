@@ -25,18 +25,28 @@ export class AddUserInfoToResponseInterceptor implements NestInterceptor {
         // checking if showUserInformation set to true
         if (data.showUserInformation === true) {
           // fetches to fname & lname & id
-          const quote = await this.prismaService.quote.findUnique({
-            where: { id: data.id },
-            select: {
-              user: { select: { fname: true, lname: true, id: true } },
-            },
-          });
-          // adding the fetched data to the data object
-          // adding user object key value pair
-          data.user = quote.user;
+          try {
+            const quote = await this.prismaService.quote.findUnique({
+              where: { id: data.id },
+              select: {
+                user: { select: { fname: true, lname: true, id: true } },
+              },
+            });
+            // adding the fetched data to the data object
+            // adding user object key value pair
+            data.user = quote.user;
+          } catch (err) {
+            data.user = {
+              fname: '',
+              lname: '',
+              id: '',
+              error: 'User not found or deleted',
+            };
+          }
         }
         // if the condition is not me then do not do anything
         // return the data back
+        console.log(data);
         return data;
       }),
     );

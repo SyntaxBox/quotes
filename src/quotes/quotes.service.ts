@@ -17,12 +17,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class QuotesService {
   constructor(private readonly prismaService: PrismaService) {}
+  // fetching random quote
   async findRandom({ select }: RandomQuote) {
-    return await this.prismaService.quote.findFirst({
-      orderBy: { id: 'asc' },
+    // returns an array with single quote
+    const quote = await this.prismaService.quote.findMany({
+      skip: Math.floor(
+        Math.random() * (await this.prismaService.quote.count()),
+      ),
       take: 1,
-      select,
+      // make sure that alway will return the id
+      select: { id: true, ...select },
     });
+    // returning the quote
+    return quote[0];
   }
   // creating new quote
   async create({ data, select }: CreateQuote) {
@@ -45,7 +52,8 @@ export class QuotesService {
     try {
       const quote = await this.prismaService.quote.findUnique({
         where,
-        select,
+        // make sure that id is always selected
+        select: { id: true, ...select },
       });
       return quote;
     } catch (err) {

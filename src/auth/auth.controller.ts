@@ -22,8 +22,8 @@ export class AuthController {
   }
 
   // google OAuth endpoint
-  @Get('google/callback')
   @UseGuards(AuthGuard('google'))
+  @Get('google/callback')
   async googleLoginCallback(@Req() req: any) {
     // extracting the user from the req
     // this user is assigned by AuthGuard

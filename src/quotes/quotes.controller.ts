@@ -32,9 +32,9 @@ export class QuotesController {
   constructor(private readonly quotesService: QuotesService) {}
 
   // add quote endpoint
-  @Post('add-quote')
   // verifying if the client if it can perform this operation
   @UseGuards(JWTAuthGuard)
+  @Post('add-quote')
   async addQuote(
     // the required data in order to create a quote
     @Body(ValidationPipe) data: AddQuoteDTO,
@@ -52,9 +52,9 @@ export class QuotesController {
   }
 
   // update quote endpoint
-  @Patch('update/:id')
   // verifying if the client if it can perform this operation
   @UseGuards(JWTAuthGuard, QuoteOwnerGuard)
+  @Patch('update/:id')
   async updateQuote(
     // the quote unique id
     @Param('id') id: string,
@@ -71,10 +71,10 @@ export class QuotesController {
     });
   }
   //delete quote endpoint
-  @Delete('delete/:id')
   // verifying if the client if it can perform this operation
   // verifying if the client id the owner
   @UseGuards(JWTAuthGuard, QuoteOwnerGuard)
+  @Delete('delete/:id')
   async deleteQuote(
     // the quote unique id
     @Param('id') id: string,
@@ -88,10 +88,10 @@ export class QuotesController {
     });
   }
 
-  @Get('random')
   //get random quote endpoint
   // adding the user info interceptor
   @UseInterceptors(AddUserInfoToResponseInterceptor)
+  @Get('random')
   async getRandomQuote(
     // returned object query params with default value
     @QuoteQuery() select: QueryParams = { quote: true },
@@ -103,9 +103,9 @@ export class QuotesController {
   }
 
   //get single quote endpoint
-  @Get('quote/:id')
   // adding the user info interceptor
   @UseInterceptors(AddUserInfoToResponseInterceptor)
+  @Get('quote/:id')
   async getQuote(
     // quote unique id
     @Param('id') id: string,
@@ -121,8 +121,6 @@ export class QuotesController {
 
   //get a list of quotes endpoint
   @Get()
-  // adding the user info interceptor
-  @UseInterceptors(AddUserInfoToResponseInterceptor)
   async getQuotes(
     // returned object query params with default value
     @QuoteQuery() select: QueryParams = { quote: true },
@@ -144,10 +142,11 @@ export class QuotesController {
         `numeric string is expected => ${skipString}`,
       );
     // fetching the quotes and returning the data back
-    return await this.quotesService.findMany({
+    const quotes = await this.quotesService.findMany({
       take,
       skip,
       select,
     });
+    return { quotes };
   }
 }

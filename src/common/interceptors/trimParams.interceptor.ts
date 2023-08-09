@@ -5,7 +5,6 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 // removes extra spaces from the request data
 // request query| params| body
@@ -24,16 +23,7 @@ export class TrimParamsInterceptor implements NestInterceptor {
     if (request.body) {
       request.body = this.trimObjectProperties(request.body);
     }
-
-    return next.handle().pipe(
-      map((data) => {
-        // check if the data exists & of type object
-        if (data && typeof data === 'object') {
-          return this.trimObjectProperties(data);
-        }
-        return data;
-      }),
-    );
+    return next.handle();
   }
 
   // operation is done only for string key values
