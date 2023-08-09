@@ -21,11 +21,17 @@ export class AuthController {
     //
   }
 
-  // google OAuth callback endpoint
+  // google OAuth endpoint
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req: any) {
-    // console.log(req);
+    // extracting the user from the req
+    // this user is assigned by AuthGuard
+    const user = req.user as { id: string };
+    // creating a JWT token with 1 month expiring date
+    return await this.authService.generateJWT(user, {
+      expiresIn: '30d',
+    });
   }
 
   @Get('h')

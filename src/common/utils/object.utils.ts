@@ -32,8 +32,9 @@ export class ObjectUtils {
   // checking if the two object keys are equal
   // return boolean value
   public objectsKeysEqual(obj1: Obj1, obj2: Obj2): boolean {
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
+    // extracting the keys and sorting them to avoid error
+    const keys1 = Object.keys(obj1).sort();
+    const keys2 = Object.keys(obj2).sort();
     return this.arraysAreEqual(keys1, keys2);
   }
 
