@@ -75,10 +75,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
     // if there is no exiting user ==> will create new user
     const newUser = await this.authService.create({
-      data: {
-        provider: Provider.GOOGLE,
-        ...profileData,
-      },
+      data: profileData,
       select: { id: true },
     });
 

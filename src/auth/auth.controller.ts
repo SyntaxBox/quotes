@@ -13,7 +13,6 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-
   // google OAuth endpoint
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -21,7 +20,7 @@ export class AuthController {
     //
   }
 
-  // google OAuth endpoint
+  // google OAuth callback endpoint
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
   async googleLoginCallback(@Req() req: any) {
@@ -31,14 +30,6 @@ export class AuthController {
     // creating a JWT token with 1 month expiring date
     return await this.authService.generateJWT(user, {
       expiresIn: '30d',
-    });
-  }
-
-  @Get('h')
-  async g() {
-    return await this.authService.validUser({
-      where: { id: 'hello' },
-      select: { id: true },
     });
   }
 }
