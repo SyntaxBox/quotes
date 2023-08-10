@@ -13,6 +13,7 @@ import {
   UserProviderId,
   UserCredentials,
   UpdateUser,
+  deleteUser,
 } from 'src/shared';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -23,7 +24,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  //create new user object
+  // create new user object
   async create({ data, select }: CreateUser) {
     const userExists = await this.prismaService.user.findFirst({
       where: { providerId: data.providerId },
@@ -45,14 +46,34 @@ export class AuthService {
     }
   }
 
-  //update user object
+  // update user object
   async update({ data, select, where }: UpdateUser) {
     const uniqueAttr = this.uniqueSelectionAttribute(where);
     try {
-      const updatedUser = this.prismaService.user.update({
+      const updatedUser = await this.prismaService.user.update({
         where: uniqueAttr,
         data,
         select,
+      });
+      return updatedUser;
+    } catch (err) {
+      throw new InternalServerErrorException('cannot update record');
+    }
+  }
+
+  // delete user object
+  async delete({ where }: deleteUser) {
+    try {
+      const updatedUser = await this.prismaService.user.delete({
+        where,
+        // return deleted user data
+        select: {
+          id: true,
+          email: true,
+          fname: true,
+          lname: true,
+          profileImage: true,
+        },
       });
       return updatedUser;
     } catch (err) {

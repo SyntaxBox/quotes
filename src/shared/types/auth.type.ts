@@ -14,6 +14,7 @@ export type UserId = Pick<User, 'id'>;
 export type UserProviderId = Pick<User, 'providerId'>;
 export type UserCredentials = Pick<User, 'email'>;
 export type UserData = Omit<User, 'id'>;
+export type SelectUser = UserId | UserProviderId | UserCredentials;
 
 export type CreateUser = {
   data: UserData;
@@ -22,12 +23,12 @@ export type CreateUser = {
 
 export type UpdateUser = {
   data: Partial<Omit<UserData, 'provider'>>;
-  where: UserId | UserProviderId | UserCredentials;
+  where: SelectUser;
   select: UserFilter;
 };
 
 export type ValidUser = {
-  where: UserId | UserProviderId | UserCredentials;
+  where: SelectUser;
   select: UserFilter;
 };
 
@@ -44,4 +45,8 @@ export type ValidUserViaProviderId = {
 export type ValidUserViaCredentials = {
   where: UserCredentials;
   select: UserFilter;
+};
+
+export type deleteUser = {
+  where: SelectUser;
 };
