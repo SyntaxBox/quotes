@@ -11,7 +11,7 @@ import {
   DeleteQuote,
   RandomQuote,
   FindManyQuotes,
-} from 'src/common';
+} from 'src/shared';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

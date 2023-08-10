@@ -13,7 +13,7 @@ import {
   UserProviderId,
   UserCredentials,
   UpdateUser,
-} from 'src/common';
+} from 'src/shared';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

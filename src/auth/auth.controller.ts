@@ -6,7 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { TrimParamsInterceptor } from 'src/common';
+import { TrimParamsInterceptor } from 'src/shared';
 import { AuthGuard } from '@nestjs/passport';
 
 @UseInterceptors(TrimParamsInterceptor)

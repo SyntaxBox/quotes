@@ -5,7 +5,7 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './google.strategy';
-import { ObjectUtils } from 'src/common';
+import { ObjectUtils } from 'src/shared';
 
 @Module({
   controllers: [AuthController],

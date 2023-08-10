@@ -15,15 +15,15 @@ import {
 } from '@nestjs/common';
 import { QuotesService } from './quotes.service';
 import {
-  AddQuoteDTO,
   AddUserInfoToResponseInterceptor,
   JWTAuthGuard,
   QueryParams,
   QuoteQuery,
   TrimParamsInterceptor,
+  QuoteOwnerGuard,
+  AddQuoteDTO,
   UpdateQuoteDTO,
-} from 'src/common';
-import { QuoteOwnerGuard } from 'src/common/guards/quotes.guard';
+} from 'src/shared';
 
 // trim extra spaces from params & queries & body string values
 @UseInterceptors(TrimParamsInterceptor)

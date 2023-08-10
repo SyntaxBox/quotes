@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ParseBooleanPipe, QuoteFilter } from 'src/common';
+import { ParseBooleanPipe, QuoteFilter } from 'src/shared';
 
 // create an object of type QuoteFilter to loop through
 const allowedQueryParams: QuoteFilter = {

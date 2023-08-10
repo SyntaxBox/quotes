@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-google-oauth20';
 import { AuthService } from './auth.service';
 import { Provider } from '@prisma/client';
-import { ObjectUtils, UserData } from 'src/common';
+import { ObjectUtils, UserData } from 'src/shared';
 
 // google OAuth strategy
 // returns user object
