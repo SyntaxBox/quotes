@@ -17,20 +17,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class QuotesService {
   constructor(private readonly prismaService: PrismaService) {}
-  // fetching random quote
-  async findRandom({ select }: RandomQuote) {
-    // returns an array with single quote
-    const quote = await this.prismaService.quote.findMany({
-      skip: Math.floor(
-        Math.random() * (await this.prismaService.quote.count()),
-      ),
-      take: 1,
-      // make sure that alway will return the id
-      select: { id: true, ...select },
-    });
-    // returning the quote
-    return quote[0];
-  }
   // creating new quote
   async create({ data, select }: CreateQuote) {
     try {
@@ -47,6 +33,21 @@ export class QuotesService {
     }
   }
 
+  // fetching random quote
+  async findRandom({ select }: RandomQuote) {
+    // returns an array with single quote
+    const quote = await this.prismaService.quote.findMany({
+      skip: Math.floor(
+        Math.random() * (await this.prismaService.quote.count()),
+      ),
+      take: 1,
+      // make sure that alway will return the id
+      select: { id: true, ...select },
+    });
+    // returning the quote
+    return quote[0];
+  }
+
   // finding unique quote using id
   async findUnique({ where, select }: FindUniqueQuote) {
     try {
@@ -55,6 +56,7 @@ export class QuotesService {
         // make sure that id is always selected
         select: { id: true, ...select },
       });
+      if (!quote) throw new NotFoundException('quote not found');
       return quote;
     } catch (err) {
       throw new NotFoundException('quote not found');
@@ -76,6 +78,8 @@ export class QuotesService {
           createdAt: 'desc',
         },
       });
+      if (quotes.length === 0)
+        throw new NotFoundException('no quotes found with current parameters');
       return quotes;
     } catch (err) {
       throw new NotFoundException('quote not found');
@@ -83,7 +87,7 @@ export class QuotesService {
   }
 
   // updating single quote via id
-  async update({ data, select, where }: UpdateQuote) {
+  async update({ where, data, select }: UpdateQuote) {
     try {
       const updatedQuote = await this.prismaService.quote.update({
         where,

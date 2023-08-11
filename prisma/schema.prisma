@@ -15,7 +15,6 @@ model Quote {
   quote               String
   author              String?
   userId              String   @db.ObjectId
-  published           Boolean
   showUserInformation Boolean
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
