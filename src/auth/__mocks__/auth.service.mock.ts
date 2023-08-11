@@ -34,9 +34,9 @@ export const AuthServiceMock = {
   update: jest.fn(
     ({ data, select, where }: UpdateUser): Promise<Partial<User>> => {
       const updatedUser: User = {
-        ...data,
-        ...where,
         ...defaultValues,
+        ...where,
+        ...data,
       };
       return new Promise((resolve) => {
         resolve(objectUtils.selectKeys(updatedUser, select));
@@ -46,8 +46,8 @@ export const AuthServiceMock = {
 
   delete: jest.fn(({ where }: deleteUser): Promise<Partial<User>> => {
     const deletedUser = {
-      ...where,
       ...defaultValues,
+      ...where,
     };
     return new Promise((resolve) => {
       resolve(
@@ -70,8 +70,8 @@ export const AuthServiceMock = {
 
   validUser: jest.fn(({ where, select }: ValidUser) => {
     const validUser = {
-      ...where,
       ...defaultValues,
+      ...where,
     };
     return new Promise((resolve) => {
       resolve(objectUtils.selectKeys(validUser, select));
