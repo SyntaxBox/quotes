@@ -14,6 +14,6 @@ export class RedirectMiddleware implements NestMiddleware {
     }
 
     // Perform the redirection logic for other routes
-    return res.redirect('/default-route');
+    return res.redirect('/quotes');
   }
 }
