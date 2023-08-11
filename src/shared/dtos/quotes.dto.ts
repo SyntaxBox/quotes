@@ -19,10 +19,6 @@ export class AddQuoteDTO {
 
   @IsBoolean()
   @IsNotEmpty()
-  published: boolean;
-
-  @IsBoolean()
-  @IsNotEmpty()
   showUserInformation: boolean;
 }
 
@@ -31,18 +27,18 @@ export class UpdateQuoteDTO {
   @IsOptional()
   @IsString()
   @MinLength(10)
-  quote: string;
+  quote?: string;
 
   @IsOptional()
   @IsString()
   @MinLength(8)
-  author: string;
+  author?: string;
 
   @IsOptional()
   @IsBoolean()
-  published: boolean;
+  published?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  showUserInformation: boolean;
+  showUserInformation?: boolean;
 }
