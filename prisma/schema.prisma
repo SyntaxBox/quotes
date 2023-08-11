@@ -32,7 +32,7 @@ model User {
   provider      Provider
   providerId    String   @unique
   profileImage  String?
-  EmailVerified Boolean
+  emailVerified Boolean
   Quote         Quote[]
 }
 
