@@ -83,10 +83,9 @@ export class AuthService {
 
   // check if the user exists in the db
   async validUser({ where, select }: ValidUser) {
-    const uniqueAttr = this.uniqueSelectionAttribute(where);
     try {
       const user = await this.prismaService.user.findUnique({
-        where: uniqueAttr,
+        where,
         select,
       });
       if (!user) false;
@@ -101,6 +100,7 @@ export class AuthService {
     return this.jwtService.sign(payload, options);
   }
 
+  //!unused method
   // check the given unique attribute to fetch unique user record
   private uniqueSelectionAttribute(
     where: UserId | UserProviderId | UserCredentials,
