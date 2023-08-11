@@ -41,7 +41,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       where: { providerId: profileData.providerId },
       select: {
         id: true,
-        EmailVerified: true,
+        emailVerified: true,
         email: true,
         fname: true,
         lname: true,
@@ -89,7 +89,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       fname: profile.name.givenName,
       lname: profile.name.familyName,
       email: profile.emails[0]?.value,
-      EmailVerified: profile.emails[0]?.verified,
+      emailVerified: profile.emails[0]?.verified,
     };
   }
 }
