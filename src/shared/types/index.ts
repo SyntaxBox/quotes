@@ -1,2 +1,2 @@
 export * from './auth.type';
-export * from './quote.type';
+export * from './quotes.type';
