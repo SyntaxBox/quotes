@@ -9,7 +9,7 @@ export class ObjectUtils {
   // takes two objects with the same key values
   // returns an objects contains the differences between the two objects
   // the differences will be taken from the first object
-  public getObjectDifferences<Obj1 extends object, Obj2 extends object>(
+  public getObjectDifferences<Obj1 extends object, Obj2 extends Obj1>(
     obj1: Obj1,
     obj2: Obj2,
   ): Partial<Obj1> {
@@ -47,5 +47,34 @@ export class ObjectUtils {
     }
 
     return arr1.every((element, index) => element === arr2[index]);
+  }
+
+  /**
+   * Selects specified keys from a source object based on a selector object.
+   * @param sourceObject The source object from which to select keys.
+   * @param selectorObject The selector object that specifies which keys to select.
+   * @returns A new object with selected keys and their corresponding values from the source object.
+   */
+  public selectKeys<T, K extends keyof T>(
+    sourceObject: T,
+    selectorObject: { [key in K]?: boolean },
+  ): Partial<T> {
+    // Filter the keys of selectorObject based on their boolean values.
+    const selectedKeys = Object.keys(selectorObject).filter(
+      (key) => selectorObject[key as K],
+    ) as K[];
+
+    // Create a new object to store the selected keys and values.
+    const selectedObject: Partial<T> = {};
+
+    // Iterate through the selected keys and copy their values from the source object.
+    selectedKeys.forEach((key) => {
+      if (sourceObject[key] !== undefined) {
+        selectedObject[key] = sourceObject[key];
+      }
+    });
+
+    // Return the new object with selected keys and values.
+    return selectedObject;
   }
 }
