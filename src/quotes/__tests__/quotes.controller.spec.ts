@@ -3,7 +3,7 @@ import { QuotesController } from '../quotes.controller';
 import { QuotesService } from '../quotes.service';
 import { QuotesServiceMock } from '../__mocks__/quote.service.mock';
 import { Quote } from '@prisma/client';
-import { AddQuoteDTO, UpdateQuoteDTO, QueryParams } from 'src/shared';
+import { AddQuoteDTO, UpdateQuoteDTO } from 'src/shared';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';

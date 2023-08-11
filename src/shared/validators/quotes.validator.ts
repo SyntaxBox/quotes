@@ -19,10 +19,6 @@ export class QueryParams {
 
   @IsBoolean()
   @IsOptional()
-  published?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
   createdAt?: boolean;
 
   @IsBoolean()
