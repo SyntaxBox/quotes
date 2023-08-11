@@ -38,7 +38,6 @@ export class AuthService {
       });
       return newUser;
     } catch (err) {
-      console.log(err);
       throw new HttpException(
         'user could not be created',
         HttpStatus.UNPROCESSABLE_ENTITY,

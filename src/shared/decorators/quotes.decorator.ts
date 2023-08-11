@@ -7,7 +7,6 @@ const allowedQueryParams: QuoteFilter = {
   quote: true,
   author: true,
   userId: true,
-  published: true,
   showUserInformation: true,
   createdAt: true,
   updatedAt: true,

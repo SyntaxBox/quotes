@@ -1,1 +1,1 @@
-export * from './quote.decorator';
+export * from './quotes.decorator';

@@ -1,2 +1,2 @@
-export * from './quote.interceptor';
+export * from './quotes.interceptor';
 export * from './trimParams.interceptor';

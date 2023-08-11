@@ -12,6 +12,7 @@ import {
   Query,
   UseInterceptors,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { QuotesService } from './quotes.service';
 import {
@@ -42,8 +43,13 @@ export class QuotesController {
     // returned object query params with default value
     @QuoteQuery() select: QueryParams = { quote: true },
   ) {
-    // assigned by the JWT Guard
-    const userId = req.userId as string;
+    let userId: string;
+    try {
+      // assigned by the JWT Guard
+      userId = req.userId as string;
+    } catch (err) {
+      throw new UnauthorizedException('cannot assure if you are the owner');
+    }
     // creating the quote and returning the data back
     return await this.quotesService.create({
       data: { ...data, userId },

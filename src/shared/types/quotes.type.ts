@@ -11,7 +11,7 @@ export type QuoteFilter = {
 
 export type Data = Pick<
   Quote,
-  'quote' | 'author' | 'published' | 'showUserInformation' | 'userId'
+  'quote' | 'author' | 'showUserInformation' | 'userId'
 >;
 
 export type CreateQuote = {
