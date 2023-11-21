@@ -14,8 +14,8 @@ const objectUtils = new ObjectUtils();
 const defaultValues: Quote = {
   id: 'defaultId',
   author: 'abdelhamid boudjit',
-  createdAt: new Date(Date.now()),
-  updatedAt: new Date(Date.now()),
+  createdAt: new Date('2023-08-13T10:56:26.095Z'),
+  updatedAt: new Date('2023-08-13T10:56:26.095Z'),
   quote: 'i love typescript',
   showUserInformation: true,
   userId: 'someID',
